@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 
 type Line =
   | { type: "text"; value: string }
@@ -13,12 +13,15 @@ export default function Terminal() {
     { type: "text", value: "Welcome to my terminal portfolio." },
     { type: "text", value: "Type 'help' to see available commands." },
   ]);
-  
+
   const [input, setInput] = useState("");
 
   const PROMPT = "kasbadji@portfolio:~$ ";
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
+
+  const COMMAND = ["help", "projects", "clear", "about"] as const;
+  const [projectSlugs, setProjectSlugs] = useState<string[]>([]);
 
   const helpText = useMemo(
     () =>
@@ -32,6 +35,21 @@ export default function Terminal() {
       ].join("\n"),
     []
   );
+
+  useEffect(() => {
+    async function loadSlugs() {
+        try {
+        const res = await fetch(`${API_BASE_URL}/projects`);
+        if (!res.ok) return;
+        const projects: Array<{ projectSlug: string }> = await res.json();
+        setProjectSlugs(projects.map((p) => p.projectSlug));
+        } catch {
+        // ignore, autocomplete will just be limited
+        }
+    }
+
+    loadSlugs();
+  }, []);
 
   async function runCommand(raw: string) {
     const command = raw.trim();
@@ -79,22 +97,24 @@ export default function Terminal() {
     if (cmd === "about") {
         try {
             const res = await fetch(`${API_BASE_URL}/profile`);
+
             if (!res.ok) throw new Error("Request failed");
+
             const profile: null | {
-            fullName: string;
-            professionalTitle: string;
-            shortBio: string;
+                fullName: string;
+                professionalTitle: string;
+                shortBio: string;
             } = await res.json();
 
             if (!profile) {
-            setLines((prev) => [...prev, { type: "text", value: "No profile found in database." }]);
-            return;
+                setLines((prev) => [...prev, { type: "text", value: "No profile found in database." }]);
+                return;
             }
 
             const output = [
-            `${profile.fullName} — ${profile.professionalTitle}`,
-            "",
-            profile.shortBio,
+                `${profile.fullName} — ${profile.professionalTitle}`,
+                "",
+                profile.shortBio,
             ].join("\n");
 
             setLines((prev) => [...prev, { type: "text", value: output }]);
@@ -193,6 +213,35 @@ export default function Terminal() {
           }}
 
           onKeyDown={(e) => {
+            if(e.key === "Tab"){
+                e.preventDefault();
+
+                const value = input;
+                const parts = value.trim().split(/\s+/);
+
+                if(parts.length <= 1){
+                    const partial = value.trim();
+                    const matches = COMMAND.filter(c => c.startsWith(partial));
+
+                    if(matches.length === 1){
+                        setInput(matches[0] + " ");
+                    }
+                    return;
+                }
+
+                const [first, second] = parts;
+
+                if(first === "project"){
+                    const partialSlug = second ?? "";
+                    const matches = projectSlugs.filter(s => s.startsWith(partialSlug));
+
+                    if(matches.length === 1){
+                        setInput(`project ${matches[0]} `);
+                    }
+                    return;
+                }
+            }
+
             if(e.key === "ArrowUp"){
                 e.preventDefault();
                 if(history.length === 0) return;
