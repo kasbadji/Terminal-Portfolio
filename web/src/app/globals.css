@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  /* Theme Colors - Default */
+  --color-bg-primary: #0a0e14;
+  --color-bg-secondary: #0f1419;
+  --color-bg-tertiary: #161b22;
+  --color-text-primary: #c9d1d9;
+  --color-text-secondary: #8b949e;
+  --color-text-accent: #58a6ff;
+  --color-terminal-cyan: #00d9ff;
+  --color-terminal-green: #39ff14;
+  --color-border: #21262d;
+  --color-dot-red: #ff5f56;
+  --color-dot-yellow: #ffbd2e;
+  --color-dot-green: #27c93f;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-mono), ui-monospace, 'Courier New', monospace;
+  background:
+    radial-gradient(ellipse at top, rgba(29, 78, 216, 0.15), transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(29, 78, 216, 0.1), transparent 50%),
+    linear-gradient(180deg, #0a0e14 0%, #0d1117 50%, #12171e 100%);
+  background-attachment: fixed;
+  color: var(--color-text-primary);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
