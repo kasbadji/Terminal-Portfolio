@@ -95,6 +95,24 @@ export const terminalTheme = {
     container: "h-16 flex justify-center items-center gap-8 border-t border-(--color-border) bg-(--color-bg-secondary) shrink-0",
     link: "text-(--color-text-secondary) hover:text-(--color-terminal-cyan) transition-colors duration-200",
     icon: "w-5 h-5"
+  },
+
+  // Skills Output
+  skills: {
+    container: "my-4 space-y-6",
+    categoryContainer: "space-y-3",
+    categoryHeader: "flex items-center gap-2 mb-3",
+    categoryIcon: "w-4 h-4 text-cyan-400",
+    categoryTitle: "text-sm font-semibold text-cyan-400 uppercase tracking-wide",
+    skillsContainer: "space-y-2 ml-6",
+    skillRow: "flex items-center gap-3",
+    skillIcon: "w-4 h-4 text-green-400 shrink-0",
+    skillName: "text-sm text-gray-300 min-w-30",
+    skillLevelContainer: "flex items-center gap-3 flex-1",
+    skillBadge: "px-2 py-0.5 text-xs font-medium bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30",
+    progressBarContainer: "flex-1 max-w-50 h-2 bg-gray-700/50 rounded-full overflow-hidden",
+    progressBar: "h-full bg-linear-to-r from-green-500 to-cyan-500 rounded-full",
+    noLevel: "text-xs text-gray-500"
   }
 } as const;
 
@@ -124,7 +142,33 @@ export const terminalAnimations = {
     initial: { opacity: 0, x: -10 },
     animate: { opacity: 1, x: 0 },
     transition: { duration: 0.2 }
-  }
+  },
+
+  // Skills animations
+  skillCategory: (catIdx: number) => ({
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay: catIdx * 0.1, duration: 0.4 }
+  }),
+
+  skillRow: (catIdx: number, skillIdx: number) => ({
+    initial: { opacity: 0, x: -20 },
+    animate: { opacity: 1, x: 0 },
+    transition: {
+      delay: catIdx * 0.1 + skillIdx * 0.05,
+      duration: 0.3
+    }
+  }),
+
+  skillProgressBar: (catIdx: number, skillIdx: number, levelNum: number) => ({
+    initial: { width: 0 },
+    animate: { width: `${levelNum}%` },
+    transition: {
+      delay: catIdx * 0.1 + skillIdx * 0.05 + 0.2,
+      duration: 0.8,
+      ease: "easeOut" as const
+    }
+  })
 } as const;
 
 // Terminal Configuration
