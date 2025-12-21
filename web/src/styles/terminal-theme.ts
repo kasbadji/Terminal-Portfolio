@@ -8,22 +8,25 @@ export const terminalTheme = {
   // Container
   container: {
     wrapper: "h-screen flex flex-col overflow-hidden",
-    wrapperStyle: { background: 'rgba(15, 20, 25, 0.4)' }
+    wrapperStyle: { background: 'var(--term-bg, rgba(15, 20, 25, 0.4))', color: 'var(--term-fg, #e5e7eb)' }
   },
 
   // Header
   header: {
-    container: "h-11 bg-(--color-bg-secondary) px-8 flex items-center justify-between shrink-0",
-    borderStyle: { borderBottom: '1px solid rgba(255, 255, 255, 0.06)' },
+    container: "h-11 px-8 flex items-center justify-between shrink-0",
+    borderStyle: {
+      borderBottom: '1px solid var(--term-border, rgba(255, 255, 255, 0.06))',
+      background: 'var(--term-bg, rgba(15, 20, 25, 0.4))'
+    },
     dotsContainer: "flex items-center gap-3",
     dots: "flex gap-2",
     dot: "w-3 h-3 rounded-full",
-    dotRed: "bg-(--color-dot-red)",
-    dotYellow: "bg-(--color-dot-yellow)",
-    dotGreen: "bg-(--color-dot-green)",
-    title: "text-(--color-text-secondary) text-sm font-medium",
-    themeLabel: "text-(--color-text-secondary) text-xs",
-    themeValue: "text-(--color-terminal-cyan)"
+    dotRed: "bg-red-500",
+    dotYellow: "bg-yellow-500",
+    dotGreen: "bg-green-500",
+    title: "text-sm font-medium",
+    themeLabel: "text-xs",
+    themeValue: ""
   },
 
   // Body/Content Area
@@ -57,7 +60,7 @@ export const terminalTheme = {
       fontKerning: 'none',
       transform: 'none',
       textShadow: 'none',
-      color: 'var(--color-terminal-cyan)',
+      color: 'var(--term-accent, #06b6d4)',
       marginBottom: '1.5rem',
       opacity: 1
     }
@@ -66,34 +69,34 @@ export const terminalTheme = {
   // Welcome Section
   welcome: {
     container: "mb-6 space-y-0.5",
-    primaryText: "text-(--color-text-primary) text-sm",
-    secondaryText: "text-(--color-text-secondary) text-sm",
-    highlightText: "text-(--color-terminal-green) font-semibold"
+    primaryText: "text-sm",
+    secondaryText: "text-sm",
+    highlightText: "font-semibold"
   },
 
   // Terminal Lines/Output
   output: {
     lineWrapper: "text-sm font-mono",
-    lineStyle: { wordBreak: 'break-word' as const },
-    prompt: "text-(--color-terminal-green) font-semibold",
-    command: "text-(--color-terminal-green)",
-    text: "whitespace-pre-wrap font-mono text-sm text-(--color-text-primary)",
-    error: "whitespace-pre-wrap font-mono text-sm text-red-400"
+    lineStyle: { wordBreak: 'break-word' as const, color: 'var(--term-fg, #e5e7eb)' },
+    prompt: "font-semibold",
+    command: "",
+    text: "whitespace-pre-wrap font-mono text-sm",
+    error: "whitespace-pre-wrap font-mono text-sm"
   },
 
   // Input Form
   input: {
     form: "flex items-center gap-2 mb-4",
-    prompt: "text-(--color-terminal-green) text-sm font-semibold shrink-0",
-    field: "flex-1 bg-transparent border-none outline-none text-(--color-terminal-green) text-sm caret-(--color-terminal-green) font-mono",
-    helpText: "text-(--color-text-secondary) text-xs",
-    helpHighlight: "text-(--color-terminal-green)"
+    prompt: "text-sm font-semibold shrink-0",
+    field: "flex-1 bg-transparent border-none outline-none text-sm font-mono",
+    helpText: "text-xs",
+    helpHighlight: ""
   },
 
   // Footer
   footer: {
-    container: "h-16 flex justify-center items-center gap-8 border-t border-(--color-border) bg-(--color-bg-secondary) shrink-0",
-    link: "text-(--color-text-secondary) hover:text-(--color-terminal-cyan) transition-colors duration-200",
+    container: "h-16 flex justify-center items-center gap-8 shrink-0",
+    link: "transition-colors duration-200",
     icon: "w-5 h-5"
   },
 
@@ -102,17 +105,17 @@ export const terminalTheme = {
     container: "my-4 space-y-6",
     categoryContainer: "space-y-3",
     categoryHeader: "flex items-center gap-2 mb-3",
-    categoryIcon: "w-4 h-4 text-cyan-400",
-    categoryTitle: "text-sm font-semibold text-cyan-400 uppercase tracking-wide",
+    categoryIcon: "w-4 h-4",
+    categoryTitle: "text-sm font-semibold uppercase tracking-wide",
     skillsContainer: "space-y-2 ml-6",
     skillRow: "flex items-center gap-3",
-    skillIcon: "w-4 h-4 text-green-400 shrink-0",
-    skillName: "text-sm text-gray-300 min-w-30",
+    skillIcon: "w-4 h-4 shrink-0",
+    skillName: "text-sm min-w-30",
     skillLevelContainer: "flex items-center gap-3 flex-1",
-    skillBadge: "px-2 py-0.5 text-xs font-medium bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30",
-    progressBarContainer: "flex-1 max-w-50 h-2 bg-gray-700/50 rounded-full overflow-hidden",
-    progressBar: "h-full bg-linear-to-r from-green-500 to-cyan-500 rounded-full",
-    noLevel: "text-xs text-gray-500"
+    skillBadge: "px-2 py-0.5 text-xs font-medium rounded-full",
+    progressBarContainer: "flex-1 max-w-50 h-2 rounded-full overflow-hidden",
+    progressBar: "h-full rounded-full",
+    noLevel: "text-xs"
   }
 } as const;
 
@@ -173,8 +176,8 @@ export const terminalAnimations = {
 
 // Terminal Configuration
 export const terminalConfig = {
-  prompt: "guest@portfolio:~$",
-  headerTitle: "portfolio@terminal ~ %",
+  prompt: "kasbadji@terminal:~$",
+  headerTitle: "kasbadji@terminal ~ %",
   headerTheme: "Default",
   welcomeMessage: "Welcome to my interactive terminal portfolio!",
   helpHint: "help",
