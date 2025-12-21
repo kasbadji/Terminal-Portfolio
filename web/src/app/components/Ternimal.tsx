@@ -242,7 +242,7 @@ export default function Terminal() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyIndex, setHistoryIndex] = useState(-1);
 
-  const COMMAND = ["help", "projects", "skills", "clear", "about"] as const;
+  const COMMAND = ["help", "about", "whoami", "projects", "skills", "education", "clear" ] as const;
   const [projectSlugs, setProjectSlugs] = useState<string[]>([]);
 
   const helpText = useMemo(
@@ -251,8 +251,10 @@ export default function Terminal() {
         "Available commands:",
         "  help      - Show this help",
         "  about     - About me",
+        "  whoami    - Who am I",
         "  projects  - List my projects",
         "  project <slug> - Show details about a project",
+        "  education - Show my education",
         "  skills    - List my skills",
         "  clear     - Clear the terminal",
       ].join("\n"),
@@ -419,7 +421,27 @@ export default function Terminal() {
         return;
     }
 
+  if (cmd === "whoami") {
+      setLines((prev) => [
+        ...prev,
+        { type: "text", value: "Kasbadji Mohamed Halim" },
+      ]);
+    return;
+  }
+
+  if (cmd === "education") {
     setLines((prev) => [
+      ...prev,
+      {
+        type: "text",
+        value:
+          "Computer Science — Alger 1 Benyoucef Benkhedda University (Licence 3)",
+      },
+    ]);
+    return;
+  }
+
+  setLines((prev) => [
       ...prev,
       { type: "error", value: `Unknown command: ${command}. Type 'help'.` },
     ]);
