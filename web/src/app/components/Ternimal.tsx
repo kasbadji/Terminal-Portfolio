@@ -3,6 +3,7 @@
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
+import { terminalTheme, terminalAnimations, terminalConfig } from "../styles/terminal-theme";
 
 type Line =
   | { type: "text"; value: string }
@@ -23,19 +24,19 @@ const ASCII_ART = `
 
 // Terminal Header Component
 const TerminalHeader = () => (
-  <div className="h-11 bg-(--color-bg-secondary) px-8 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-    <div className="flex items-center gap-3">
-      <div className="flex gap-2">
-        <div className="w-3 h-3 rounded-full bg-(--color-dot-red)"></div>
-        <div className="w-3 h-3 rounded-full bg-(--color-dot-yellow)"></div>
-        <div className="w-3 h-3 rounded-full bg-(--color-dot-green)"></div>
+  <div className={terminalTheme.header.container} style={terminalTheme.header.borderStyle}>
+    <div className={terminalTheme.header.dotsContainer}>
+      <div className={terminalTheme.header.dots}>
+        <div className={`${terminalTheme.header.dot} ${terminalTheme.header.dotRed}`}></div>
+        <div className={`${terminalTheme.header.dot} ${terminalTheme.header.dotYellow}`}></div>
+        <div className={`${terminalTheme.header.dot} ${terminalTheme.header.dotGreen}`}></div>
       </div>
-      <span className="text-(--color-text-secondary) text-sm font-medium">
-        portfolio@terminal ~ %
+      <span className={terminalTheme.header.title}>
+        {terminalConfig.headerTitle}
       </span>
     </div>
-    <div className="text-(--color-text-secondary) text-xs">
-      Theme: <span className="text-(--color-terminal-cyan)">Default</span>
+    <div className={terminalTheme.header.themeLabel}>
+      Theme: <span className={terminalTheme.header.themeValue}>{terminalConfig.headerTheme}</span>
     </div>
   </div>
 );
@@ -43,35 +44,33 @@ const TerminalHeader = () => (
 // Footer Social Icons Component
 const FooterSocial = () => (
   <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: 0.8, duration: 0.5 }}
-    className="h-16 flex justify-center items-center gap-8 border-t border-(--color-border) bg-(--color-bg-secondary) shrink-0"
+    {...terminalAnimations.footer}
+    className={terminalTheme.footer.container}
   >
     <a
       href="https://github.com/kasbadji"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-(--color-text-secondary) hover:text-(--color-terminal-cyan) transition-colors duration-200"
+      className={terminalTheme.footer.link}
       aria-label="GitHub"
     >
-      <Github className="w-5 h-5" />
+      <Github className={terminalTheme.footer.icon} />
     </a>
     <a
       href="https://linkedin.com/in/kasbadji-halim-161684335"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-(--color-text-secondary) hover:text-(--color-terminal-cyan) transition-colors duration-200"
+      className={terminalTheme.footer.link}
       aria-label="LinkedIn"
     >
-      <Linkedin className="w-5 h-5" />
+      <Linkedin className={terminalTheme.footer.icon} />
     </a>
     <a
       href="mailto:mohamed.kasbadji@univ-alger.dz"
-      className="text-(--color-text-secondary) hover:text-(--color-terminal-cyan) transition-colors duration-200"
+      className={terminalTheme.footer.link}
       aria-label="Email"
     >
-      <Mail className="w-5 h-5" />
+      <Mail className={terminalTheme.footer.icon} />
     </a>
   </motion.div>
 );
@@ -81,7 +80,7 @@ export default function Terminal() {
   const [input, setInput] = useState("");
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
-  const PROMPT = "guest@portfolio:~$";
+  const PROMPT = terminalConfig.prompt;
   const [history, setHistory] = useState<string[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -94,10 +93,10 @@ export default function Terminal() {
       [
         "Available commands:",
         "  help      - Show this help",
-        "  projects  - List my projects",
-        "  clear     - Clear the terminal",
         "  about     - About me",
+        "  projects  - List my projects",
         "  project <slug> - Show details about a project",
+        "  clear     - Clear the terminal",
       ].join("\n"),
     []
   );
@@ -247,73 +246,46 @@ export default function Terminal() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ background: 'rgba(15, 20, 25, 0.4)' }}>
+    <div className={terminalTheme.container.wrapper} style={terminalTheme.container.wrapperStyle}>
       {/* Terminal Header - Fixed */}
       <TerminalHeader />
 
       {/* Terminal Body - Scrollable */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden" style={{ paddingLeft: '32px', paddingRight: '32px', paddingTop: '32px', paddingBottom: '80px' }}>
-        <div style={{ maxWidth: '110ch' }}>
+      <div className={terminalTheme.body.scrollContainer} style={terminalTheme.body.scrollStyle}>
+        <div className={terminalTheme.body.contentWrapper}>
         {/* ASCII Art Header */}
-        <pre
-          style={{
-            margin: 0,
-            padding: 0,
-            fontSize: 'clamp(9px, 1.8vw, 15px)',
-            lineHeight: '1',
-            whiteSpace: 'pre',
-            letterSpacing: '0',
-            maxWidth: '100%',
-            overflow: 'hidden',
-            fontFamily: 'var(--font-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-            fontWeight: '700',
-            fontVariantLigatures: 'none',
-            fontFeatureSettings: '"liga" 0, "calt" 0',
-            fontKerning: 'none',
-            transform: 'none',
-            textShadow: 'none',
-            color: 'var(--color-terminal-cyan)',
-            marginBottom: '1.5rem',
-            opacity: 1
-          }}
-        >
+        <pre style={terminalTheme.ascii.style}>
           {ASCII_ART}
         </pre>
 
         {/* Welcome Messages */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="mb-4 space-y-0.5"
+          {...terminalAnimations.welcome}
+          className={terminalTheme.welcome.container}
         >
-          <div className="text-(--color-text-primary) text-sm">
-            Welcome to my interactive terminal portfolio!
+          <div className={terminalTheme.welcome.primaryText}>
+            {terminalConfig.welcomeMessage}
           </div>
-          <div className="text-(--color-text-secondary) text-sm">
-            Type <span className="text-(--color-terminal-green) font-semibold">help</span> to get started.
+          <div className={terminalTheme.welcome.secondaryText}>
+            Type <span className={terminalTheme.welcome.highlightText}>{terminalConfig.helpHint}</span> {terminalConfig.welcomeHint.replace('Type help', '')}
           </div>
         </motion.div>
 
         {/* Terminal Output */}
-        <div className="space-y-1 mb-3">
+        <div className={terminalTheme.body.outputContainer}>
           {lines.map((l, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.2 }}
-              style={{ wordBreak: 'break-word' }}
+              {...terminalAnimations.line}
+              style={terminalTheme.output.lineStyle}
             >
               {l.type === "command" ? (
-                <div className="text-sm font-mono">
-                  <span className="text-(--color-terminal-green) font-semibold">{l.prompt}</span>
-                  <span className="text-(--color-terminal-green)"> {l.command}</span>
+                <div className={terminalTheme.output.lineWrapper}>
+                  <span className={terminalTheme.output.prompt}>{l.prompt}</span>
+                  <span className={terminalTheme.output.command}> {l.command}</span>
                 </div>
               ) : (
-                <pre className={`whitespace-pre-wrap font-mono text-sm ${
-                  l.type === "error" ? "text-red-400" : "text-(--color-text-primary)"
-                }`}>{l.value}</pre>
+                <pre className={l.type === "error" ? terminalTheme.output.error : terminalTheme.output.text}>{l.value}</pre>
               )}
             </motion.div>
           ))}
@@ -322,9 +294,7 @@ export default function Terminal() {
 
         {/* Input Line */}
         <motion.form
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
+          {...terminalAnimations.input}
           onSubmit={(e) => {
             e.preventDefault();
             const trimmed = input.trim();
@@ -337,16 +307,16 @@ export default function Terminal() {
             runCommand(input);
             setInput("");
           }}
-          className="flex items-center gap-2 mb-3"
+          className={terminalTheme.input.form}
         >
-          <span className="text-(--color-terminal-green) text-sm font-semibold shrink-0">
+          <span className={terminalTheme.input.prompt}>
             {PROMPT}
           </span>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             autoFocus
-            className="flex-1 bg-transparent border-none outline-none text-(--color-terminal-green) text-sm caret-(--color-terminal-green) font-mono"
+            className={terminalTheme.input.field}
               onKeyDown={(e) => {
                 if (e.key === "Tab") {
                   e.preventDefault();
@@ -418,12 +388,10 @@ export default function Terminal() {
           {/* Help Text */}
           {lines.length === 0 && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="text-(--color-text-secondary) text-xs"
+              {...terminalAnimations.helpText}
+              className={terminalTheme.input.helpText}
             >
-              Type <span className="text-(--color-terminal-green)">help</span> to see available commands. Use Tab for auto-complete.
+              Type <span className={terminalTheme.input.helpHighlight}>{terminalConfig.helpHint}</span> to see available commands. Use Tab for auto-complete.
             </motion.div>
           )}
         </div>
